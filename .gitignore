@@ -1,0 +1,23 @@
+bin
+bin/*
+bin-int/*
+
+*.log
+
+*.json
+
+#Windows Visual Studio
+.vs/
+*.vcxproj
+*.vcxproj.user
+*.vcxproj.filters
+*.sln
+
+#Xcode
+*.DS_Store
+*.xcodeproj/
+*.xcworkspace/
+DerivedData/
+
+#Visual Studio Code
+.vscode/
