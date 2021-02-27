@@ -13,6 +13,7 @@
 
 #include "Mesh.h"
 #include "Shader.h"
+#include "Window.h"
 
 // Window dimensions
 const GLint WIDTH = 800, HEIGHT = 600;
@@ -20,18 +21,6 @@ const float toRadians = M_PI / 180.0f;
 
 std::vector<Mesh*> meshList;
 std::vector<Shader> shaderList;
-
-bool direction = true;
-float triOffset = 0.0f;
-float triMaxoffset = 0.7f;
-float triIncrement = 0.005f;
-
-float curAngle = 0.0f;
-
-bool sizeDirection = true;
-float curSize = 0.4f;
-float maxSize = 0.8f;
-float minSize = 0.1f;
 
 // Vertex Shader
 static const char* vShader = "shaders/shader.vert";
@@ -75,55 +64,11 @@ void CreateShaders() {
 
 int main(int argc, char** argv) {
     
-    // Initialise GLFW
-    if(!glfwInit()) {
-        printf("GLFW initialisation failed!\n");
-        glfwTerminate();
-        
+    Window mainWindow(WIDTH, HEIGHT);
+    if (!mainWindow.Initialise()) {
+        printf("Failed to create window!\n");
         return 1;
     }
-    
-    // Setup GLFW Window Properties
-
-    // OpenGL version
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    
-    // Core profile - No Backwards Compatibility
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    
-    // Allow forward compatibility
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    
-    GLFWwindow* mainWindow = glfwCreateWindow(WIDTH, HEIGHT, "Test Window", nullptr, nullptr);
-    if (!mainWindow){
-        printf("GLFW window creation failed!\n");
-        glfwTerminate();
-        return 1;
-    }
-    
-    // Get Buffer size information
-    int bufferWidth, bufferHeight;
-    glfwGetFramebufferSize(mainWindow, &bufferWidth, &bufferHeight);
-    
-    // Set context for GLEW to use
-    glfwMakeContextCurrent(mainWindow);
-    
-    // Allow modern extension features
-    glewExperimental = GL_TRUE;
-    
-    if (glewInit() != GLEW_OK) {
-        printf("GLEW initialisation failed!\n");
-        glfwDestroyWindow(mainWindow);
-        glfwTerminate();
-        return 1;
-    }
-    
-    // Enables depth testing to determinate which triangles are deeper in the image
-    glEnable(GL_DEPTH_TEST);
-    
-    // Setup Viewport size
-    glViewport(0, 0, bufferWidth, bufferHeight);
     
     CreateObjects();
     
@@ -135,35 +80,12 @@ int main(int argc, char** argv) {
     glBindVertexArray(0);
     
     GLuint uniformProjection = 0, uniformModel = 0;
-    glm::mat4 projection = glm::perspective(45.0f, static_cast<GLfloat>(bufferWidth) / static_cast<GLfloat>(bufferHeight), 0.1f, 100.0f);
+    glm::mat4 projection = glm::perspective(45.0f, static_cast<GLfloat>(mainWindow.GetBufferWidth()) / static_cast<GLfloat>(mainWindow.GetBufferHeight()), 0.1f, 100.0f);
     
     // Loop until window closed
-    while(!glfwWindowShouldClose(mainWindow)) {
+    while(!mainWindow.GetShouldClose()) {
         // Get + handle user input events
         glfwPollEvents();
-        
-        if (direction) {
-            triOffset += triIncrement;
-        } else {
-            triOffset -= triIncrement;
-        }
-        
-        if (abs(triOffset) >= triMaxoffset)
-            direction = !direction;
-        
-        curAngle += 0.3f;
-        
-        if (curAngle >= 360.0f)
-            curAngle = -360.0f;
-        
-        if (sizeDirection) {
-            curSize += 0.01f;
-        } else {
-            curSize -= 0.01f;
-        }
-        
-        if (curSize >= maxSize || curSize <= minSize)
-            sizeDirection = !sizeDirection;
         
         // Clear window
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -176,8 +98,7 @@ int main(int argc, char** argv) {
         {
             glm::mat4 model(1.0f);
 
-            model = glm::translate(model, glm::vec3(triOffset, 0.0f, -2.5f));
-            model = glm::rotate(model, curAngle * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+            model = glm::translate(model, glm::vec3(0.0f, 0.0f, -2.5f));
             model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
             
             glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -186,7 +107,7 @@ int main(int argc, char** argv) {
             meshList[0]->Render();
             
             model = glm::mat4(1.0f);
-            model = glm::translate(model, glm::vec3(-triOffset, 1.0f, -2.5f));
+            model = glm::translate(model, glm::vec3(0.0f, 1.0f, -2.5f));
             model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
             
             glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -197,7 +118,7 @@ int main(int argc, char** argv) {
         }
         glUseProgram(0);
         
-        glfwSwapBuffers(mainWindow);
+        mainWindow.SwapBuffers();
     }
     
     return 0;
