@@ -81,7 +81,8 @@ project "Project"
     includedirs
     {
         "%{prj.name}/vendor/GLEW/v2_2_0/include",
-        "%{prj.name}/vendor/GLM/v0_9_9_8/include"
+        "%{prj.name}/vendor/GLM/v0_9_9_8/include",
+        "%{prj.name}/vendor/STB/include"
     }
 
     links {
