@@ -13,7 +13,7 @@ public:
     Camera(glm::vec3 startPosition, glm::vec3 startUp, GLfloat startYaw, GLfloat startPitch, GLfloat startMoveSpeed, GLfloat startTurnSpeed);
     ~Camera() {}
     
-    void KeyControl(bool* keys);
+    void KeyControl(bool* keys, GLfloat deltaTime);
     
     glm::mat4 CalculateViewMatrix();
     

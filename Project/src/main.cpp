@@ -24,6 +24,9 @@ std::vector<Mesh*> meshList;
 std::vector<Shader> shaderList;
 Camera camera;
 
+GLfloat deltaTime = 0.0f;
+GLfloat lastTime = 0.0f;
+
 // Vertex Shader
 static const char* vShader = "shaders/shader.vert";
 
@@ -88,10 +91,14 @@ int main(int argc, char** argv) {
     
     // Loop until window closed
     while(!mainWindow.GetShouldClose()) {
+        GLfloat now = glfwGetTime();
+        deltaTime = now - lastTime;
+        lastTime = now;
+        
         // Get + handle user input events
         glfwPollEvents();
         
-        camera.KeyControl(mainWindow.GetKeys());
+        camera.KeyControl(mainWindow.GetKeys(), deltaTime);
         
         // Clear window
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
