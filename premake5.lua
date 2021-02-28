@@ -91,7 +91,8 @@ project "Project"
 
     postbuildcommands
     {
-        ("{COPY} ./shaders \"../bin/" .. outputdir .. "/%{prj.name}/\"")
+        ("{COPY} ./shaders \"../bin/" .. outputdir .. "/%{prj.name}/\""),
+        ("{COPY} ./textures \"../bin/" .. outputdir .. "/%{prj.name}/\"")
     }
 
     filter "system:macosx"
