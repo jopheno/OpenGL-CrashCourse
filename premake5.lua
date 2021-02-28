@@ -89,14 +89,14 @@ project "Project"
         "GLEW"
     }
 
-    postbuildcommands
-    {
-        ("{COPY} ./shaders \"../bin/" .. outputdir .. "/%{prj.name}/\""),
-        ("{COPY} ./textures \"../bin/" .. outputdir .. "/%{prj.name}/\"")
-    }
-
     filter "system:macosx"
         xcodebuildsettings { ["ALWAYS_SEARCH_USER_PATHS"] = "YES" }
+
+        postbuildcommands
+        {
+            ("{COPY} ./shaders \"../bin/" .. outputdir .. "/%{prj.name}/\""),
+            ("{COPY} ./textures \"../bin/" .. outputdir .. "/%{prj.name}/\"")
+        }
 
     filter "system:windows"
         systemversion "latest"
@@ -121,7 +121,9 @@ project "Project"
 
         postbuildcommands
         {
-            ("{COPY} ./vendor/GLFW/Windows/lib/x64/glfw3.dll \"../bin/" .. outputdir .. "/%{prj.name}/\"")
+            ("{COPY} ./vendor/GLFW/Windows/lib/x64/glfw3.dll \"../bin/" .. outputdir .. "/%{prj.name}/\""),
+            ("{COPY} ./shaders \"../bin/" .. outputdir .. "/%{prj.name}/shaders/\""),
+            ("{COPY} ./textures \"../bin/" .. outputdir .. "/%{prj.name}/textures/\"")
         }
 
     filter "system:macosx"

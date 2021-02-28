@@ -1,8 +1,9 @@
 #include <cstdio>
 #include <cstdlib>
-#include <cmath>
 #include <string>
 #include <vector>
+#define _USE_MATH_DEFINES
+#include <cmath>
 
 #define STB_IMAGE_IMPLEMENTATION
 
