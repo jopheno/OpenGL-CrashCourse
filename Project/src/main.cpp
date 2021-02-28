@@ -84,7 +84,7 @@ int main(int argc, char** argv) {
     }
     glBindVertexArray(0);
     
-    camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 5.0f, 1.0f);
+    camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 5.0f, 0.5f);
     
     GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0;
     glm::mat4 projection = glm::perspective(45.0f, static_cast<GLfloat>(mainWindow.GetBufferWidth()) / static_cast<GLfloat>(mainWindow.GetBufferHeight()), 0.1f, 100.0f);
@@ -99,6 +99,7 @@ int main(int argc, char** argv) {
         glfwPollEvents();
         
         camera.KeyControl(mainWindow.GetKeys(), deltaTime);
+        camera.MouseControl(mainWindow.GetChangeInXAxis(), mainWindow.GetChangeInYAxis());
         
         // Clear window
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
