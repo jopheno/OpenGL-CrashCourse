@@ -1,13 +1,13 @@
 #include "Window.h"
 
-Window::Window(): width(800), height(600) {
+Window::Window(): width(800), height(600), xChange(0.0f), yChange(0.0f) {
     for (size_t i = 0; i < 1024; i++) {
         keys[i] = false;
     }
     
     mouseFirstMoved = true;
 }
-Window::Window(GLint width, GLint height): width(width), height(height) {
+Window::Window(GLint width, GLint height): width(width), height(height), xChange(0.0f), yChange(0.0f) {
     for (size_t i = 0; i < 1024; i++) {
         keys[i] = false;
     }
