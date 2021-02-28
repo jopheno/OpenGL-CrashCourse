@@ -2,9 +2,11 @@
 
 layout (location = 0) in vec3 pos;
 layout (location = 1) in vec2 texUV;
+layout (location = 2) in vec3 norm;
 
 out vec4 vCol;
 out vec2 textureCoord;
+out vec3 normal;
 
 uniform mat4 projection;
 uniform mat4 view;
@@ -15,4 +17,6 @@ void main() {
     vCol = vec4(clamp(pos, 0.0f, 1.0f), 1.0f);
 
     textureCoord = texUV;
+
+    normal = mat3(transpose(inverse(model))) * norm;
 }
