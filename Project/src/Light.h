@@ -9,7 +9,7 @@ public:
     Light(glm::vec3 colour, GLfloat ambientIntensity, GLfloat diffuseIntensity );
     ~Light();
     
-    void Use(GLfloat ambientIntensityLocation, GLfloat colourLocation, GLfloat diffuseIntensityLocation);
+    void Use(GLuint ambientIntensityLocation, GLuint colourLocation, GLuint diffuseIntensityLocation);
     
     
 protected:
