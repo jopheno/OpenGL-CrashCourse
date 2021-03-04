@@ -95,7 +95,7 @@ project "Project"
         postbuildcommands
         {
             ("{COPY} ./shaders \"../bin/" .. outputdir .. "/%{prj.name}/\""),
-            ("{COPY} ./textures \"../bin/" .. outputdir .. "/%{prj.name}/\"")
+            ("{COPY} ./textures \"../bin/" .. outputdir .. "/%{prj.name}/\""),
         }
 
     filter "system:windows"
@@ -116,7 +116,8 @@ project "Project"
         }
 
         includedirs {
-            "%{prj.name}/vendor/GLFW/Windows/include"
+            "%{prj.name}/vendor/GLFW/Windows/include",
+            "%{prj.name}/vendor/ASSIMP/include"
         }
 
         postbuildcommands
@@ -130,16 +131,19 @@ project "Project"
         debugdir ""
 
         libdirs {
-            "%{prj.name}/vendor/GLFW/MacOS/lib"
+            "%{prj.name}/vendor/GLFW/MacOS/lib",
+            "%{prj.name}/vendor/ASSIMP/MacOS/lib"
         }
 
         links {
             "glfw",
+            "assimp",
             "/Library/Frameworks/OpenGL.framework"
         }
 
         includedirs {
-            "%{prj.name}/vendor/GLFW/MacOS/include"
+            "%{prj.name}/vendor/GLFW/MacOS/include",
+            "%{prj.name}/vendor/ASSIMP/MacOS/include"
         }
 
     filter "configurations:Debug"

@@ -10,7 +10,8 @@ public:
     Texture(char* fileLocation);
     ~Texture();
     
-    void Load();
+    bool Load();
+    bool LoadWithAlpha();
     void Use();
     void Clear();
 private:

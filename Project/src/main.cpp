@@ -25,6 +25,8 @@
 #include "SpotLight.h"
 #include "Material.h"
 
+#include <assimp/Importer.hpp>
+
 // Window dimensions
 const GLint WIDTH = 1366, HEIGHT = 768;
 const float toRadians = M_PI / 180.0f;
@@ -179,9 +181,9 @@ int main(int argc, char** argv) {
     dirtTexture = Texture("textures/dirt.png");
     plainTexture = Texture("textures/plain.png");
     
-    brickTexture.Load();
-    dirtTexture.Load();
-    plainTexture.Load();
+    brickTexture.LoadWithAlpha();
+    dirtTexture.LoadWithAlpha();
+    plainTexture.LoadWithAlpha();
     
     shinyMaterial = Material(4.0f, 256);
     dullMaterial = Material(0.3f, 4);
@@ -229,6 +231,8 @@ int main(int argc, char** argv) {
     GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformEyePosition = 0;
     GLuint uniformSpecularIntensity = 0, uniformShininess = 0;
     glm::mat4 projection = glm::perspective(45.0f, static_cast<GLfloat>(mainWindow.GetBufferWidth()) / static_cast<GLfloat>(mainWindow.GetBufferHeight()), 0.1f, 100.0f);
+    
+    Assimp::Importer importer = Assimp::Importer();
     
     // Loop until window closed
     while(!mainWindow.GetShouldClose()) {
