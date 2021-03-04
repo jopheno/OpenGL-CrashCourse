@@ -2,9 +2,7 @@
 
 Texture::Texture(): textureId(0), width(0), height(0), bitDepth(0), fileLocation(nullptr) {}
 
-Texture::Texture(char* fileLocation): Texture::Texture() {
-    this->fileLocation = fileLocation;
-}
+Texture::Texture(const char* fileLocation): textureId(0), width(0), height(0), bitDepth(0), fileLocation(fileLocation) {}
 
 bool Texture::LoadWithAlpha() {
     if (fileLocation == nullptr) {
