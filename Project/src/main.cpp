@@ -27,6 +27,8 @@
 
 #include <assimp/Importer.hpp>
 
+#include "Model.h"
+
 // Window dimensions
 const GLint WIDTH = 1366, HEIGHT = 768;
 const float toRadians = M_PI / 180.0f;
@@ -41,6 +43,9 @@ Texture plainTexture;
 
 Material shinyMaterial;
 Material dullMaterial;
+
+Model xwing;
+Model blackhawk;
 
 DirectionalLight mainLight;
 PointLight pointLights[MAX_POINT_LIGHTS];
@@ -188,22 +193,28 @@ int main(int argc, char** argv) {
     shinyMaterial = Material(4.0f, 256);
     dullMaterial = Material(0.3f, 4);
     
+    xwing = Model();
+    xwing.Load("models/x-wing.obj");
+
+    blackhawk = Model();
+    blackhawk.Load("models/uh60.obj");
+    
     mainLight = DirectionalLight(glm::vec3(1.0f, 1.0f, 1.0f),
-                                 0.1f, 0.1f,
+                                 0.2f, 0.6f,
                                  glm::vec3(0.0f, 0.0f, -1.0f)
     );
     
     unsigned int pointLightCount = 0;
     
     pointLights[0] = PointLight(glm::vec3(0.0f, 0.0f, 1.0f),
-                                0.0f, 0.1f,
+                                0.4f, 0.1f,
                                 glm::vec3(0.0f, 0.0f, 0.0f),
                                 0.3f, 0.2f, 0.1f
     );
     pointLightCount++;
     
     pointLights[1] = PointLight(glm::vec3(0.0f, 1.0f, 0.0f),
-                                0.0f, 0.1f,
+                                0.4f, 0.1f,
                                 glm::vec3(-4.0f, 2.0f, 0.0f),
                                 0.3f, 0.1f, 0.1f
     );
@@ -262,7 +273,9 @@ int main(int argc, char** argv) {
         glm::vec3 lowerLight = camera.GetPosition();
         lowerLight.y -= 0.3f;
 
-        spotLights[0].SetFlash(lowerLight, camera.GetDirection());
+        if (mainWindow.GetKeys()[GLFW_KEY_F]) {
+            spotLights[0].SetFlash(lowerLight, camera.GetDirection());
+        }
         
         shaderList[0].SetDirectionalLight(&mainLight);
         shaderList[0].SetPointLights(pointLights, pointLightCount);
@@ -301,9 +314,32 @@ int main(int argc, char** argv) {
             glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
             glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.CalculateViewMatrix()));
             
-            shinyMaterial.Use(uniformSpecularIntensity, uniformShininess);
+            dullMaterial.Use(uniformSpecularIntensity, uniformShininess);
             dirtTexture.Use();
             meshList[2]->Render();
+            
+            model = glm::mat4(1.0f);
+            model = glm::translate(model, glm::vec3(-7.0f, 0.0f, 10.0f));
+            model = glm::scale(model, glm::vec3(0.006f, 0.006f, 0.006f));
+            
+            glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+            glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
+            glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.CalculateViewMatrix()));
+            
+            shinyMaterial.Use(uniformSpecularIntensity, uniformShininess);
+            xwing.Render();
+            
+            model = glm::mat4(1.0f);
+            model = glm::translate(model, glm::vec3(-3.0f, 2.0f, 0.0f));
+            model = glm::rotate(model, -90.0f*toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+            model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
+            
+            glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+            glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
+            glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.CalculateViewMatrix()));
+            
+            dullMaterial.Use(uniformSpecularIntensity, uniformShininess);
+            blackhawk.Render();
             
         }
         glUseProgram(0);
