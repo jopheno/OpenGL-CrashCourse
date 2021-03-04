@@ -96,6 +96,7 @@ project "Project"
         {
             ("{COPY} ./shaders \"../bin/" .. outputdir .. "/%{prj.name}/\""),
             ("{COPY} ./textures \"../bin/" .. outputdir .. "/%{prj.name}/\""),
+            ("{COPY} ./models \"../bin/" .. outputdir .. "/%{prj.name}/\"")
         }
 
     filter "system:windows"
